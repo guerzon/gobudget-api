@@ -1,0 +1,1390 @@
+basePath: /beta
+consumes:
+- application/json
+definitions:
+  CreateUserRequest:
+    properties:
+      email:
+        example: fname.lname@contoso.com
+        type: string
+      password:
+        example: password123456
+        minLength: 10
+        type: string
+      username:
+        minLength: 5
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
+  DetailedBudgetResponse:
+    properties:
+      accounts:
+        items:
+          $ref: '#/definitions/db.Account'
+        type: array
+      currency_code:
+        example: USD
+        type: string
+      id:
+        example: ea930f68-e192-407d...
+        type: string
+      name:
+        example: My USD Budget
+        type: string
+    type: object
+  RenewTokenRequest:
+    properties:
+      refresh_token:
+        example: eyJhbGciOiJIUzI1Ni...
+        type: string
+    required:
+    - refresh_token
+    type: object
+  RenewTokenResponse:
+    properties:
+      access_token:
+        example: eyJhbGciOiJIUzI1Ni...
+        type: string
+      access_token_expires_at:
+        example: "2023-10-31T22:14:50+08:00"
+        type: string
+      session_id:
+        example: ea930f68-e192-407d...
+        type: string
+    type: object
+  TransactionRequest:
+    properties:
+      account_id:
+        type: string
+      amount:
+        type: integer
+      category_id:
+        type: string
+      cleared:
+        type: boolean
+      date:
+        type: string
+      memo:
+        type: string
+      payee_id:
+        type: string
+      reconciled:
+        type: boolean
+    required:
+    - account_id
+    - amount
+    - category_id
+    - date
+    - payee_id
+    type: object
+  TransactionResponse:
+    properties:
+      account_name:
+        type: string
+      amount:
+        type: integer
+      approved:
+        type: boolean
+      category_name:
+        type: string
+      cleared:
+        type: boolean
+      date:
+        $ref: '#/definitions/pgtype.Date'
+      memo:
+        $ref: '#/definitions/pgtype.Text'
+      payee_name:
+        type: string
+      reconciled:
+        type: boolean
+    type: object
+  UpdateUserRequest:
+    properties:
+      email:
+        example: fname.lname@contoso.com
+        type: string
+      password:
+        example: password123456
+        type: string
+    type: object
+  UserResponse:
+    properties:
+      created_at:
+        example: "2023-09-29T22:14:50+08:00"
+        type: string
+      email:
+        example: fname.lname@contoso.com
+        type: string
+      email_verified:
+        example: true
+        type: boolean
+      last_password_change:
+        example: "2023-09-29T22:14:50+08:00"
+        type: string
+      username:
+        example: rjoooidggt
+        type: string
+    type: object
+  api.HTTPError:
+    properties:
+      msg:
+        example: invalid request
+        type: string
+    type: object
+  api.categoryGroupRqst:
+    properties:
+      name:
+        example: Living Expenses
+        minLength: 5
+        type: string
+    required:
+    - name
+    type: object
+  api.categoryResponse:
+    properties:
+      categories:
+        items:
+          $ref: '#/definitions/db.Category'
+        type: array
+      category_group_id:
+        type: string
+      name:
+        example: Rent
+        type: string
+    type: object
+  api.categoryRqst:
+    properties:
+      name:
+        example: Rent
+        minLength: 2
+        type: string
+    required:
+    - name
+    type: object
+  api.payeeRqst:
+    properties:
+      name:
+        example: Edeka
+        minLength: 2
+        type: string
+    required:
+    - name
+    type: object
+  api.updateAccountRequest:
+    properties:
+      balance:
+        example: 100
+        type: integer
+      cleared_balance:
+        example: 50
+        type: integer
+      closed:
+        example: false
+        type: boolean
+      last_reconciled_at:
+        type: string
+      name:
+        example: Chase Savings
+        type: string
+      note:
+        type: string
+      type:
+        example: Savings
+        type: string
+      uncleared_balance:
+        example: 50
+        type: integer
+    type: object
+  db.Account:
+    properties:
+      balance:
+        type: integer
+      budget_id:
+        type: string
+      cleared_balance:
+        type: integer
+      closed:
+        type: boolean
+      id:
+        type: string
+      last_reconciled_at:
+        type: string
+      name:
+        type: string
+      note:
+        $ref: '#/definitions/pgtype.Text'
+      type:
+        type: string
+      uncleared_balance:
+        type: integer
+    type: object
+  db.Category:
+    properties:
+      category_group_id:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  db.CategoryGroup:
+    properties:
+      budget_id:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  db.CreateAccountParams:
+    properties:
+      balance:
+        type: integer
+      budget_id:
+        type: string
+      name:
+        type: string
+      type:
+        type: string
+    type: object
+  db.CreateBudgetParams:
+    properties:
+      currency_code:
+        type: string
+      name:
+        type: string
+      owner_username:
+        type: string
+    type: object
+  db.Payee:
+    properties:
+      budget_id:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  db.TransactionsView:
+    properties:
+      account_id:
+        type: string
+      account_name:
+        type: string
+      amount:
+        type: integer
+      approved:
+        type: boolean
+      budget_id:
+        type: string
+      category_id:
+        type: string
+      category_name:
+        type: string
+      cleared:
+        type: boolean
+      date:
+        $ref: '#/definitions/pgtype.Date'
+      id:
+        type: string
+      memo:
+        $ref: '#/definitions/pgtype.Text'
+      payee_id:
+        type: string
+      payee_name:
+        type: string
+      reconciled:
+        type: boolean
+    type: object
+  db.UpdateAccountParams:
+    properties:
+      balance:
+        $ref: '#/definitions/pgtype.Int4'
+      budget_id:
+        type: string
+      cleared_balance:
+        $ref: '#/definitions/pgtype.Int4'
+      closed:
+        $ref: '#/definitions/pgtype.Bool'
+      id:
+        type: string
+      last_reconciled_at:
+        $ref: '#/definitions/pgtype.Timestamptz'
+      name:
+        $ref: '#/definitions/pgtype.Text'
+      note:
+        $ref: '#/definitions/pgtype.Text'
+      type:
+        $ref: '#/definitions/pgtype.Text'
+      uncleared_balance:
+        $ref: '#/definitions/pgtype.Int4'
+    type: object
+  pgtype.Bool:
+    properties:
+      bool:
+        type: boolean
+      valid:
+        type: boolean
+    type: object
+  pgtype.Date:
+    properties:
+      infinityModifier:
+        $ref: '#/definitions/pgtype.InfinityModifier'
+      time:
+        type: string
+      valid:
+        type: boolean
+    type: object
+  pgtype.InfinityModifier:
+    enum:
+    - 1
+    - 0
+    - -1
+    type: integer
+    x-enum-varnames:
+    - Infinity
+    - Finite
+    - NegativeInfinity
+  pgtype.Int4:
+    properties:
+      int32:
+        type: integer
+      valid:
+        type: boolean
+    type: object
+  pgtype.Text:
+    properties:
+      string:
+        type: string
+      valid:
+        type: boolean
+    type: object
+  pgtype.Timestamptz:
+    properties:
+      infinityModifier:
+        $ref: '#/definitions/pgtype.InfinityModifier'
+      time:
+        type: string
+      valid:
+        type: boolean
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+host: localhost:8080
+info:
+  contact: {}
+  description: gobudget API
+  title: gobudget API
+  version: beta
+paths:
+  /budgets:
+    delete:
+      description: Delete a budget.
+      parameters:
+      - description: Budget ID
+        in: path
+        name: budget_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: budget deleted
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Delete budget
+      tags:
+      - Budget
+    get:
+      consumes:
+      - application/json
+      description: List all budgets.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/db.CreateBudgetParams'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: List budgets
+      tags:
+      - Budget
+    post:
+      consumes:
+      - application/json
+      description: Create a new budget.
+      parameters:
+      - description: Create a budget
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/db.CreateBudgetParams'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.CreateBudgetParams'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Create budget
+      tags:
+      - Budget
+  /budgets/:budget_id:
+    get:
+      consumes:
+      - application/json
+      description: Get the details of a budget.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/DetailedBudgetResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Get budget
+      tags:
+      - Budget
+  /budgets/{budget_id}/accounts:
+    get:
+      consumes:
+      - application/json
+      description: List all accounts associated with a budget.
+      parameters:
+      - description: Budget ID
+        in: path
+        name: budget_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/db.CreateAccountParams'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: List all budgeting accounts
+      tags:
+      - Accounts
+    post:
+      consumes:
+      - application/json
+      description: Create a budgeting account.
+      parameters:
+      - description: Budget ID
+        in: path
+        name: budget_id
+        required: true
+        type: string
+      - description: Account details
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/api.updateAccountRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.CreateAccountParams'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Create a budgeting account
+      tags:
+      - Accounts
+  /budgets/{budget_id}/accounts/{account_id}:
+    delete:
+      description: Delete a budgeting account.
+      parameters:
+      - description: Budget ID
+        in: path
+        name: budget_id
+        required: true
+        type: string
+      - description: Account ID
+        in: path
+        name: account_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: budgeting account deleted
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Delete a budgeting account
+      tags:
+      - Accounts
+    get:
+      consumes:
+      - application/json
+      description: Get the details of an account associated with a budget.
+      parameters:
+      - description: Budget ID
+        in: path
+        name: budget_id
+        required: true
+        type: string
+      - description: Account ID
+        in: path
+        name: account_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.CreateAccountParams'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Get a single budgeting account
+      tags:
+      - Accounts
+    put:
+      consumes:
+      - application/json
+      description: Update a budgeting account.
+      parameters:
+      - description: Budget ID
+        in: path
+        name: budget_id
+        required: true
+        type: string
+      - description: Account ID
+        in: path
+        name: account_id
+        required: true
+        type: string
+      - description: Account details
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/api.updateAccountRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.UpdateAccountParams'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Update a budgeting account
+      tags:
+      - Accounts
+  /budgets/{budget_id}/categories:
+    get:
+      description: List all categories in a budget grouped by category group
+      parameters:
+      - description: Budget ID
+        in: path
+        name: budget_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.categoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Get category groups and categories
+      tags:
+      - Categories
+  /budgets/{budget_id}/categories/{category_group_id}:
+    post:
+      consumes:
+      - application/json
+      description: Create a budgeting category.
+      parameters:
+      - description: Budget ID
+        in: path
+        name: budget_id
+        required: true
+        type: string
+      - description: Category Group ID
+        in: path
+        name: category_group_id
+        required: true
+        type: string
+      - description: Category details
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/api.categoryRqst'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.Category'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Create a budgeting category
+      tags:
+      - Categories
+  /budgets/{budget_id}/categories/{category_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a category.
+      parameters:
+      - description: Budget ID
+        in: path
+        name: budget_id
+        required: true
+        type: string
+      - description: Category ID
+        in: path
+        name: category_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: category deleted
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Delete a category
+      tags:
+      - Categories
+    put:
+      consumes:
+      - application/json
+      description: Update a budgeting category.
+      parameters:
+      - description: Budget ID
+        in: path
+        name: budget_id
+        required: true
+        type: string
+      - description: Category ID
+        in: path
+        name: category_id
+        required: true
+        type: string
+      - description: Category details
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/api.categoryRqst'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.Category'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Update a budgeting category
+      tags:
+      - Categories
+  /budgets/{budget_id}/category-groups:
+    get:
+      description: List all category groups associated with a budget.
+      parameters:
+      - description: Budget ID
+        in: path
+        name: budget_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/db.CategoryGroup'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: List all budgeting category groups
+      tags:
+      - Categories
+    post:
+      consumes:
+      - application/json
+      description: Create a budgeting category group.
+      parameters:
+      - description: Budget ID
+        in: path
+        name: budget_id
+        required: true
+        type: string
+      - description: Category group details
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/api.categoryGroupRqst'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.CategoryGroup'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Create a budgeting category group
+      tags:
+      - Categories
+  /budgets/{budget_id}/category-groups/{category_group_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a budgeting category group and all categories in the group.
+      parameters:
+      - description: Budget ID
+        in: path
+        name: budget_id
+        required: true
+        type: string
+      - description: Category Group ID
+        in: path
+        name: category_group_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: category group deleted
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Delete a category group
+      tags:
+      - Categories
+    put:
+      consumes:
+      - application/json
+      description: Update a budgeting category group.
+      parameters:
+      - description: Budget ID
+        in: path
+        name: budget_id
+        required: true
+        type: string
+      - description: Category Group ID
+        in: path
+        name: category_group_id
+        required: true
+        type: string
+      - description: Category group details
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/api.categoryGroupRqst'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.CategoryGroup'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Update a budgeting category group
+      tags:
+      - Categories
+  /budgets/{budget_id}/payees:
+    get:
+      description: Get all payees
+      parameters:
+      - description: Budget ID
+        in: path
+        name: budget_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/db.Payee'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: List payees
+      tags:
+      - Payees
+    post:
+      consumes:
+      - application/json
+      description: Create a spending recipient.
+      parameters:
+      - description: Budget ID
+        in: path
+        name: budget_id
+        required: true
+        type: string
+      - description: Payee details
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/api.payeeRqst'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.Payee'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Create a payee
+      tags:
+      - Payees
+  /budgets/{budget_id}/payees/{payee_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a payee.
+      parameters:
+      - description: Budget ID
+        in: path
+        name: budget_id
+        required: true
+        type: string
+      - description: Payee ID
+        in: path
+        name: Payee_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: payee deleted
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Delete a payee
+      tags:
+      - Payees
+    get:
+      description: Get a payee by id
+      parameters:
+      - description: Budget ID
+        in: path
+        name: budget_id
+        required: true
+        type: string
+      - description: Payee ID
+        in: path
+        name: payee_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.Payee'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Get payee
+      tags:
+      - Payees
+    put:
+      consumes:
+      - application/json
+      description: Update a payee.
+      parameters:
+      - description: Budget ID
+        in: path
+        name: budget_id
+        required: true
+        type: string
+      - description: Payee ID
+        in: path
+        name: Payee_id
+        required: true
+        type: string
+      - description: Payee details
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/api.payeeRqst'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.Payee'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Update a payee
+      tags:
+      - Payees
+  /budgets/{budget_id}/transactions:
+    get:
+      consumes:
+      - application/json
+      description: List all transactions across all accounts in the budget.
+      parameters:
+      - description: Budget ID
+        in: path
+        name: budget_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/db.TransactionsView'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: List all transactions
+      tags:
+      - Transactions
+    post:
+      consumes:
+      - application/json
+      description: Create a transaction.
+      parameters:
+      - description: Budget ID
+        in: path
+        name: budget_id
+        required: true
+        type: string
+      - description: Transaction details
+        in: body
+        name: transaction
+        required: true
+        schema:
+          $ref: '#/definitions/TransactionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.TransactionsView'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Create a transaction
+      tags:
+      - Categories
+  /budgets/{budget_id}/transactions/{transaction_id}:
+    get:
+      consumes:
+      - application/json
+      description: Get the details of a transaction
+      parameters:
+      - description: Budget ID
+        in: path
+        name: budget_id
+        required: true
+        type: string
+      - description: Transaction ID
+        in: path
+        name: transaction_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/TransactionResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Get a transaction
+      tags:
+      - Transactions
+  /renew_token:
+    post:
+      consumes:
+      - application/json
+      description: Renew access token using a refresh token.
+      parameters:
+      - description: Refresh token
+        in: body
+        name: refresh_token
+        required: true
+        schema:
+          $ref: '#/definitions/RenewTokenRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/RenewTokenResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Renew token
+      tags:
+      - Security
+  /user:
+    delete:
+      description: Delete the authenticated user's account.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: user has been deleted
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      security:
+      - Bearer: []
+      summary: Delete user
+      tags:
+      - User
+    post:
+      consumes:
+      - application/json
+      description: Create a new user account. An email is sent asking the user to
+        verify their email.
+      parameters:
+      - description: Create a new user
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      summary: Create user
+      tags:
+      - User
+    put:
+      description: Update the authenticated user's account.
+      parameters:
+      - description: Update account
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.HTTPError'
+      security:
+      - Bearer: []
+      summary: Update user
+      tags:
+      - User
+produces:
+- application/json
+securityDefinitions:
+  Bearer:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

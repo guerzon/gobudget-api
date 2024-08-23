@@ -1,0 +1,31 @@
+version: '3.8'
+name: gobudgetapi
+services:
+  db:
+    image: postgres:16-alpine
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d appdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    environment:
+      - POSTGRES_USER=app
+      - POSTGRES_PASSWORD=Supers3cret
+      - POSTGRES_DB=appdb
+    ports:
+      - "5432:5432"
+    volumes: 
+      - data:/var/lib/postgresql/data
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+  mailhog:
+    image: ghcr.io/guerzon/mailhog2
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+volumes:
+  data:
+    driver: local

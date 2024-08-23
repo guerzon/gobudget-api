@@ -1,0 +1,39 @@
+name: 'build and test'
+
+on:
+  push:
+    branches: [ '**' ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ^1.22
+        id: go
+
+      - name: Checkout out code
+        uses: actions/checkout@v2
+      
+      - name: Test
+        run: make test
+
+  Security:
+    runs-on: ubuntu-latest
+    env:
+      GO111MODULE: on
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+      - name: Run Gosec Security Scanner
+        uses: securego/gosec@master
+        with:
+          args: -exclude=G404 ./...

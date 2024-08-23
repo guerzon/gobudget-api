@@ -1,0 +1,27 @@
+version: "2"
+sql:
+  - engine: "postgresql"
+    queries: "./queries/"
+    schema: "./migration/"
+    gen:
+      go:
+        package: "db"
+        sql_package: "pgx/v5"
+        out: "../pkg/db"
+        emit_json_tags: true
+        emit_empty_slices: true
+        emit_interface: true
+        emit_prepared_queries: false
+        overrides:
+          - db_type: "timestamptz"
+            go_type: "time.Time"
+          - db_type: "timestamp"
+            go_type: "time.Time"
+          - db_type: "uuid"
+            go_type: "github.com/google/uuid.UUID"
+          - db_type: "serial"
+            go_type: "int32"
+overrides:
+    go: null
+plugins: []
+rules: []
