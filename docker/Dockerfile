@@ -14,7 +14,6 @@ RUN addgroup app && adduser -S app app
 
 WORKDIR /app
 COPY --from=builder /app/gobudgetapi .
-COPY app.env .
 COPY db/migration ./db/migration
 
 RUN chown -R app:app /app
