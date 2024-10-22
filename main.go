@@ -105,7 +105,7 @@ func main() {
 		defer cancel()
 
 		if err := srv.Shutdown(ctx); err != nil {
-			slog.Error("cannot shut down server: %s", err)
+			slog.Error("cannot shut down server", "shutdown", "shutdown API server", "errmsg", err)
 		}
 		close(idleConnsClosed)
 	}()
