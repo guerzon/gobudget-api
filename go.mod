@@ -7,7 +7,7 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/golang-migrate/migrate/v4 v4.18.1
 	github.com/google/uuid v1.6.0
-	github.com/hibiken/asynq v0.24.1
+	github.com/hibiken/asynq v0.25.0
 	github.com/jackc/pgx/v5 v5.7.1
 	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible
 	github.com/spf13/viper v1.19.0
@@ -40,7 +40,6 @@ require (
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.22.1 // indirect
 	github.com/goccy/go-json v0.10.3 // indirect
-	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
